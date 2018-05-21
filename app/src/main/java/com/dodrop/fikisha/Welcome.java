@@ -132,13 +132,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
                 if (isOnline) {
                     if (ActivityCompat.checkSelfPermission(Welcome.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                             ActivityCompat.checkSelfPermission(Welcome.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
+
                         return;
                     }
                     buildLocationRequest();
@@ -185,6 +179,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
         drivers = FirebaseDatabase.getInstance().getReference(Common.driver_tbl);
         geoFire = new GeoFire(drivers);
 
+        setUpLocation();
 
         mService = Common.getGoogleAPI();
     }
@@ -239,10 +234,10 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
                             if(location_switch.isChecked())
                             {
                                 final double latitude = mLastLocation.getLatitude();
-                                final double longtitude = mLastLocation.getLongitude();
+                                final double longitude = mLastLocation.getLongitude();
 
                                 //get update to Firebase
-                                geoFire.setLocation(FirebaseAuth.getInstance().getCurrentUser().getUid(), new GeoLocation(latitude, longtitude), new GeoFire.CompletionListener() {
+                                geoFire.setLocation(FirebaseAuth.getInstance().getCurrentUser().getUid(), new GeoLocation(latitude, longitude), new GeoFire.CompletionListener() {
                                     @Override
                                     public void onComplete(String key, DatabaseError error) {
                                         //Add Marker
@@ -250,10 +245,11 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
                                             mCurrent.remove();
 
                                         mCurrent = mMap.addMarker(new MarkerOptions()
-                                                .position(new LatLng(latitude, longtitude))
+                                                .position(new LatLng(latitude, longitude))
+                                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_motorcycle_black_24dp))
                                                 .title("Current Location"));
                                         //Move Camera to this position
-                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longtitude),15.0f));
+                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude),15.0f));
                                         rotateMarker(mCurrent, -360,mMap);
 
                                     }
@@ -329,7 +325,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
 
 
     private void buildLocationRequest() {
-        LocationRequest mLocationRequest = LocationRequest.create();
+        mLocationRequest = LocationRequest.create();
         mLocationRequest.setInterval(UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(FATEST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);

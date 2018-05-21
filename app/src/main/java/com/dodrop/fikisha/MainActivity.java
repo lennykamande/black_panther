@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.setView(login_layout);
 
         //set button
-        dialog.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("LOGIN", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 

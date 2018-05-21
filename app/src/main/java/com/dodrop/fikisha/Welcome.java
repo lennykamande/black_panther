@@ -146,7 +146,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
                     fusedLocationProviderClient.removeLocationUpdates(locationCallback);
                     mCurrent.remove();
                     mMap.clear();
-                    handler.removeCallbacks(drawPathRunnable);
+                    //handler.removeCallbacks(drawPathRunnable);
                     Snackbar.make(mapFragment.getView(), "You are Offline", Snackbar.LENGTH_SHORT)
                             .show();
                 }
@@ -246,11 +246,10 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
 
                                         mCurrent = mMap.addMarker(new MarkerOptions()
                                                 .position(new LatLng(latitude, longitude))
-                                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_motorcycle_black_24dp))
                                                 .title("Current Location"));
                                         //Move Camera to this position
                                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude),15.0f));
-                                        rotateMarker(mCurrent, -360,mMap);
+                                        //rotateMarker(mCurrent, -360,mMap);
 
                                     }
                                 });

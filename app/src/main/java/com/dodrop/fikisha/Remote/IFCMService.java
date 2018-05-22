@@ -1,5 +1,8 @@
 package com.dodrop.fikisha.Remote;
 
+import com.dodrop.fikisha.Model.FCMResponse;
+import com.dodrop.fikisha.Model.Sender;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
@@ -15,5 +18,5 @@ public interface IFCMService {
             "Authorization:key=AAAAzklPLcw:APA91bFxEYs0Ex7Szh2oNdILB6tzy7XCfbMGzPeAbHhgJo-aJWbeelMvc2iP7VYxLahSJ-74tr8gKqGL_V9odXakxAVoSTM7_OMAdstwPItvYe0GngHzmLvexoJP0E7-zmMl3Rjs0wKb"
     })
     @POST("fcm/send")
-    Call<String > sendMessage(@Body String body);
+    Call<FCMResponse> sendMessage(@Body Sender body);
 }

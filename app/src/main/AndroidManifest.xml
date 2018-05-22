@@ -43,6 +43,13 @@
             android:name=".Welcome"
             android:label="@string/title_activity_welcome" />
         <activity android:name=".ClientCall"></activity>
+
+        <service android:name=".Service.MyFirebaseIdService">
+            <action android:name="com.google.firebase.INSTANT_ID_EVENT"/>
+        </service>
+        <service android:name=".Service.MyFirebaseMessaging">
+            <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+        </service>
     </application>
 
 </manifest>

@@ -76,7 +76,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Welcome extends FragmentActivity implements OnMapReadyCallback {
-
     private GoogleMap mMap;
     SupportMapFragment mapFragment;
 
@@ -118,6 +117,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        handler = new Handler();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -146,7 +146,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
                     fusedLocationProviderClient.removeLocationUpdates(locationCallback);
                     mCurrent.remove();
                     mMap.clear();
-                    //handler.removeCallbacks(drawPathRunnable);
+                    handler.removeCallbacks(drawPathRunnable);
                     Snackbar.make(mapFragment.getView(), "You are Offline", Snackbar.LENGTH_SHORT)
                             .show();
                 }
@@ -191,8 +191,8 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     buildLocationRequest();
                     createLocationCallBack();
-                        if (location_switch.isChecked())
-                            displayLocation();
+                    if (location_switch.isChecked())
+                        displayLocation();
 
                 }
         }
@@ -246,6 +246,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
 
                                         mCurrent = mMap.addMarker(new MarkerOptions()
                                                 .position(new LatLng(latitude, longitude))
+                                                //.icon(BitmapDescriptorFactory.fromResource(R.drawable.car))
                                                 .title("Current Location"));
                                         //Move Camera to this position
                                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude),15.0f));
@@ -300,11 +301,11 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
 
         else
         {
-                buildLocationRequest();
-                createLocationCallBack();
-                if(location_switch.isChecked())
-                    displayLocation();
-            }
+            buildLocationRequest();
+            createLocationCallBack();
+            if(location_switch.isChecked())
+                displayLocation();
+        }
 
     }
 
@@ -341,7 +342,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
                     "transit_routing_preference=less_driving&"+
                     "origin="+currentPosition.latitude+","+currentPosition.longitude+"&"+
                     "destination="+destination+"&"+
-                    "key="+getResources().getString(R.string.google_directions_api);
+                    "key="+getResources().getString(R.string.google_direction_api);
             Log.d("DODROP", requestApi);
             mService.getPath(requestApi)
                     .enqueue(new Callback<String>() {
@@ -405,7 +406,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
 
                                 carMarker = mMap.addMarker(new MarkerOptions().position(currentPosition)
                                         .flat(true)
-                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.bike)));
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.car)));
 
                                 handler = new Handler();
                                 index=-1;
@@ -427,7 +428,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
                     });
         }catch (Exception e) {
             e.printStackTrace();
-        }   
+        }
     }
 
     private List decodePoly(String encoded) {
@@ -470,7 +471,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
             if(index<polyLineList.size()-1)
             {
                 index++;
-                next = index + 1;
+                next = index+1;
             }
             if(index < polyLineList.size()-1)
             {

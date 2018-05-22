@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\Sony\AndroidStudioProjects\black_panther\app\app.iml" filepath="C:\Users\Sony\AndroidStudioProjects\black_panther\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/black_panther.iml" filepath="$PROJECT_DIR$/black_panther.iml" />
       <module fileurl="file://C:\Users\Sony\AndroidStudioProjects\black_panther\fika.iml" filepath="C:\Users\Sony\AndroidStudioProjects\black_panther\fika.iml" />
     </modules>

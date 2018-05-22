@@ -118,6 +118,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        handler = new Handler();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -246,11 +247,11 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
 
                                         mCurrent = mMap.addMarker(new MarkerOptions()
                                                 .position(new LatLng(latitude, longitude))
-                                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_motorcycle_black_24dp))
+                                                //.icon(BitmapDescriptorFactory.fromResource(R.drawable.car))
                                                 .title("Current Location"));
                                         //Move Camera to this position
                                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude),15.0f));
-                                        rotateMarker(mCurrent, -360,mMap);
+                                        //rotateMarker(mCurrent, -360,mMap);
 
                                     }
                                 });
@@ -342,7 +343,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
                     "transit_routing_preference=less_driving&"+
                     "origin="+currentPosition.latitude+","+currentPosition.longitude+"&"+
                     "destination="+destination+"&"+
-                    "key="+getResources().getString(R.string.google_directions_api);
+                    "key="+getResources().getString(R.string.google_direction_api);
             Log.d("DODROP", requestApi);
             mService.getPath(requestApi)
                     .enqueue(new Callback<String>() {
@@ -406,7 +407,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
 
                                 carMarker = mMap.addMarker(new MarkerOptions().position(currentPosition)
                                         .flat(true)
-                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.bike)));
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.car)));
 
                                 handler = new Handler();
                                 index=-1;
@@ -471,7 +472,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
             if(index<polyLineList.size()-1)
             {
                 index++;
-                next = index + 1;
+                next = index+1;
             }
             if(index < polyLineList.size()-1)
             {

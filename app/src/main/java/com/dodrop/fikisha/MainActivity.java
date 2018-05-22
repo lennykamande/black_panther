@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.setView(register_layout);
 
         //set button
-        dialog.setPositiveButton("RESISTER", new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("REGISTER", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 

@@ -15,10 +15,62 @@
       },
       "oauth_client": [
         {
+          "client_id": "885993188812-1l22c6mcsc65fbj4gpiiki5o8149gsop.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dodrop.fikisha",
+            "certificate_hash": "1e330672c7df53e5545f36ac16a3813b7e5d4cf6"
+          }
+        },
+        {
           "client_id": "885993188812-04975tpe2r8m4kdi42p025k202kj1op9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.dodrop.fikisha",
+            "certificate_hash": "125aeddf20ad5a87d22b379cee20ba4ea1232eb0"
+          }
+        },
+        {
+          "client_id": "885993188812-22sc916tesobu3jghoapg3iohug09f1h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLJ0cPR-wQLGHL3aINuKi5aqGoi1GJU-0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "885993188812-22sc916tesobu3jghoapg3iohug09f1h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:885993188812:android:da84218f0d854d14",
+        "android_client_info": {
+          "package_name": "com.dodrop.riderapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "885993188812-kffpnt89li74i529stfju4ci8875shri.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dodrop.riderapp",
             "certificate_hash": "125aeddf20ad5a87d22b379cee20ba4ea1232eb0"
           }
         },

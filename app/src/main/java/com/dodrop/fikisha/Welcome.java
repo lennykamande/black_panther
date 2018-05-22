@@ -76,7 +76,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Welcome extends FragmentActivity implements OnMapReadyCallback {
-
     private GoogleMap mMap;
     SupportMapFragment mapFragment;
 
@@ -192,8 +191,8 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     buildLocationRequest();
                     createLocationCallBack();
-                        if (location_switch.isChecked())
-                            displayLocation();
+                    if (location_switch.isChecked())
+                        displayLocation();
 
                 }
         }
@@ -302,11 +301,11 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
 
         else
         {
-                buildLocationRequest();
-                createLocationCallBack();
-                if(location_switch.isChecked())
-                    displayLocation();
-            }
+            buildLocationRequest();
+            createLocationCallBack();
+            if(location_switch.isChecked())
+                displayLocation();
+        }
 
     }
 
@@ -429,7 +428,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
                     });
         }catch (Exception e) {
             e.printStackTrace();
-        }   
+        }
     }
 
     private List decodePoly(String encoded) {

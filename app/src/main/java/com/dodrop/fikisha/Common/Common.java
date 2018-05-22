@@ -1,5 +1,7 @@
 package com.dodrop.fikisha.Common;
 
+import com.dodrop.fikisha.Remote.FCMClient;
+import com.dodrop.fikisha.Remote.IFCMService;
 import com.dodrop.fikisha.Remote.IGoogleAPI;
 import com.dodrop.fikisha.Remote.RetrofitClient;
 
@@ -16,9 +18,15 @@ public class Common {
     public static final String token_tbl = "Tokens";
 
     public static final String baseURL = "https://maps.googleapis.com";
+    public static final String fcmURL = "https://fcm.googleapis.com";
 
     public static IGoogleAPI getGoogleAPI()
     {
         return RetrofitClient.getClient(baseURL).create(IGoogleAPI.class);
+    }
+
+    public static IFCMService getFCMService()
+    {
+        return FCMClient.getClient(fcmURL).create(IFCMService.class);
     }
 }

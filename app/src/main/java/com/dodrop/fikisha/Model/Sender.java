@@ -1,28 +1,20 @@
 package com.dodrop.fikisha.Model;
 
+
 /**
- * Created by Lenny Kamande on 5/18/2018.
+ * Created by Lenny Kamande on 5/23/2018.
  */
 
 public class Sender {
-
-    public Data data;
     public String to;
+    public Notification notification;
+
+    public Sender(String to, Notification notification) {
+        this.to = to;
+        this.notification = notification;
+    }
 
     public Sender() {
-    }
-
-    public Sender(Data data, String to){
-        this.data = data;
-        this.to = to;
-    }
-
-    public Data getData() {
-        return data;
-    }
-
-    public void setData(Data data) {
-        this.data = data;
     }
 
     public String getTo() {
@@ -31,5 +23,13 @@ public class Sender {
 
     public void setTo(String to) {
         this.to = to;
+    }
+
+    public Notification getNotification() {
+        return notification;
+    }
+
+    public void setNotification(Notification notification) {
+        this.notification = notification;
     }
 }

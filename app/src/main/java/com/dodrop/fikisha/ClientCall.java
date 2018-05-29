@@ -51,7 +51,7 @@ public class ClientCall extends AppCompatActivity {
     MediaPlayer mediaPlayer;
 
     IGoogleAPI mService;
-    IFCMService mFCMservice;
+    IFCMService mFCMService;
 
     String customerId;
 
@@ -63,7 +63,7 @@ public class ClientCall extends AppCompatActivity {
         setContentView(R.layout.activity_client_call);
 
         mService = Common.getGoogleAPI();
-        mFCMservice = Common.getFCMService();
+        mFCMService = Common.getFCMService();
 
         txtTime = (TextView)findViewById(R.id.txtTime);
         txtAddress = (TextView)findViewById(R.id.txtAddress);
@@ -79,6 +79,7 @@ public class ClientCall extends AppCompatActivity {
                 //Sending Client Location to driver tracking
                 intent.putExtra("lat", lat);
                 intent.putExtra("lng", lng);
+                intent.putExtra("customerId", customerId);
 
                 startActivity(intent);
                 finish();
@@ -110,10 +111,10 @@ public class ClientCall extends AppCompatActivity {
 
     private void cancelBooking(String customerId) {
         Token token = new Token(customerId);
-        Notification notification = new Notification("Notice!", "Driver Has Cancelled Trip");
+        Notification notification = new Notification("Cancellation", "Driver Has Cancelled Trip");
         Sender sender = new Sender(token.getToken(),notification);
 
-        mFCMservice.sendMessage(sender)
+        mFCMService.sendMessage(sender)
                 .enqueue(new Callback<FCMResponse>() {
                     @Override
                     public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {

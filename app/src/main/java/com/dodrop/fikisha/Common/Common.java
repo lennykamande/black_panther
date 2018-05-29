@@ -2,6 +2,7 @@ package com.dodrop.fikisha.Common;
 
 import android.location.Location;
 
+import com.dodrop.fikisha.Model.User;
 import com.dodrop.fikisha.Remote.FCMClient;
 import com.dodrop.fikisha.Remote.IFCMService;
 import com.dodrop.fikisha.Remote.IGoogleAPI;
@@ -18,6 +19,8 @@ public class Common {
     public static final String user_rider_tbl = "RidersInformation";
     public static final String pickup_request_tbl = "PickupRequest";
     public static final String token_tbl = "Tokens";
+
+    public static User currentUser;
 
     public static Location mLastLocation=null;
 

@@ -5,6 +5,7 @@ import android.Manifest;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -38,6 +39,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -52,6 +54,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -67,6 +70,7 @@ import com.firebase.geofire.GeoLocation;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.maps.android.SphericalUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -112,6 +116,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
     private LatLng startPosition, endPosition, currentPosition;
     private int index, next;
     private PlaceAutocompleteFragment places;
+    AutocompleteFilter typeFilter;
     private String destination;
     private PolylineOptions polylineOptions, blackPolylineOption;
     private Polyline blackPolyline, greyPolyline;
@@ -177,6 +182,12 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
         });
 
         polyLineList = new ArrayList<>();
+        //places API
+        typeFilter = new AutocompleteFilter.Builder()
+                .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
+                .setTypeFilter(3)
+                .build();
+
         places = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         places.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -232,7 +243,21 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
     }
 
     public void onMapReady(GoogleMap googleMap) {
+
         mMap = googleMap;
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            boolean success = googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            this, R.raw.maps));
+
+            if (!success) {
+                Log.e("WelcomeActivity", "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e("WelcomeActivity", "Can't find style. Error: ", e);
+        }
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.setTrafficEnabled(false);
         mMap.setIndoorEnabled(false);
@@ -268,6 +293,18 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
                             {
                                 final double latitude = Common.mLastLocation.getLatitude();
                                 final double longitude = Common.mLastLocation.getLongitude();
+
+                                LatLng center = new LatLng(latitude,longitude);
+                                LatLng northSide = SphericalUtil.computeOffset(center, 100000, 0);
+                                LatLng southSide = SphericalUtil.computeOffset(center, 100000, 180);
+
+                                LatLngBounds bounds = LatLngBounds.builder()
+                                        .include(northSide)
+                                        .include(southSide)
+                                        .build();
+
+                                places.setBoundsBias(bounds);
+                                places.setFilter(typeFilter);
 
                                 //get update to Firebase
                                 geoFire.setLocation(FirebaseAuth.getInstance().getCurrentUser().getUid(), new GeoLocation(latitude, longitude), new GeoFire.CompletionListener() {

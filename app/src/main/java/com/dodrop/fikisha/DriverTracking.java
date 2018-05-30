@@ -143,7 +143,7 @@ public class DriverTracking extends FragmentActivity implements OnMapReadyCallba
 
         riderMarker = mMap.addCircle(new CircleOptions()
                         .center(new LatLng(riderLat,riderLng))
-                        .radius(10)
+                        .radius(50)
                         .strokeColor(Color.BLUE)
                         .fillColor(0x220000FF)
                         .strokeWidth(5.0f));
@@ -191,7 +191,7 @@ public class DriverTracking extends FragmentActivity implements OnMapReadyCallba
 
     private void sendArrivedNotification(String customerId) {
         Token token = new Token(customerId);
-        Notification notification = new Notification("Motorbike Arrival", String.format("Your Motorbike Driver",Common.currentUser.getName(),"Has Arrived"));
+        Notification notification = new Notification("Motorbike Arrival", String.format("Your Motorbike Driver %s Has Arrived", Common.currentUser.getName()));
         Sender sender = new Sender(token.getToken(), notification);
 
         mFCMService.sendMessage(sender).enqueue(new Callback<FCMResponse>() {
@@ -268,7 +268,7 @@ public class DriverTracking extends FragmentActivity implements OnMapReadyCallba
                         public void onResponse(Call<String> call, Response<String> response) {
                             try{
 
-                                new ParserTask().execute();
+                                new ParserTask().execute(response.body().toString());
 
                             }catch (Exception e) {
                                 e.printStackTrace();
@@ -356,7 +356,7 @@ public class DriverTracking extends FragmentActivity implements OnMapReadyCallba
 
                 List<HashMap<String,String>> path = lists.get(i);
 
-                for(int j=0;j<lists.size();j++)
+                for(int j=0;j<path.size();j++)
                 {
                     HashMap<String,String> point = path.get(j);
 

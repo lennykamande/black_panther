@@ -4,6 +4,7 @@ import android.*;
 import android.Manifest;
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -16,7 +17,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.dodrop.fikisha.Common.Common;
@@ -102,6 +105,9 @@ public class DriverTracking extends FragmentActivity implements OnMapReadyCallba
 
     GeoFire geoFire;
 
+    Button btnStartTrip;
+
+    Location pickupLocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,8 +141,95 @@ public class DriverTracking extends FragmentActivity implements OnMapReadyCallba
         mFCMService = Common.getFCMService();
 
         setUpLocation();
+
+        btnStartTrip = (Button)findViewById(R.id.btnStartTrip);
+        btnStartTrip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(btnStartTrip.getText().equals("START TRIP"))
+                {
+                    pickupLocation = Common.mLastLocation;
+                    btnStartTrip.setText("END TRIP");
+                }
+                else if(btnStartTrip.getText().equals("END TRIP"))
+                {
+                    calculateCashFee(pickupLocation, Common.mLastLocation);
+                }
+            }
+        });
     }
-    
+
+    private void calculateCashFee(final Location pickupLocation, Location mLastLocation) {
+
+
+        String requestApi = null;
+        try{
+            requestApi = "https://maps.googleapis.com/maps/api/directions/json?"+
+                    "mode=driving&"+
+                    "transit_routing_preference=less_driving&"+
+                    "origin="+pickupLocation.getLatitude()+","+pickupLocation.getLongitude()+"&"+
+                    "destination="+mLastLocation.getLatitude()+","+mLastLocation.getLongitude()+"&"+
+                    "key="+getResources().getString(R.string.google_direction_api);
+
+            mService.getPath(requestApi)
+                    .enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            try{
+
+                                JSONObject jsonObject = new JSONObject(response.body().toString());
+                                JSONArray routes = jsonObject.getJSONArray("routes");
+
+                                JSONObject object = routes.getJSONObject(0);
+
+                                JSONArray legs = object.getJSONArray("legs");
+
+                                JSONObject legsObject = legs.getJSONObject(0);
+
+                                JSONObject distance = legsObject.getJSONObject("distance");
+                                String distance_text = distance.getString("text");
+
+                                Double distance_value = Double.parseDouble(distance_text.replaceAll("[^0-9\\\\.]+",""));
+
+                                JSONObject timeObject = legsObject.getJSONObject("duration");
+                                String time_text = distance.getString("text");
+
+                                Double time_value = Double.parseDouble(time_text.replaceAll("\\D+",""));
+
+                                //Calculator Function
+
+                                //Create new Activity
+                                Intent intent = new Intent(DriverTracking.this, TripDetailActivity.class);
+                                intent.putExtra("start_address", legsObject.getLong("start_address"));
+                                intent.putExtra("end_address", legsObject.getLong("end_address"));
+                                intent.putExtra("time", String.valueOf(time_value));
+                                intent.putExtra("distance", String.valueOf(distance_value));
+                                intent.putExtra("total", Common.getPrice(distance_value,time_value));
+                                //intent.putExtra("location_Start",String.format("%f,%f",pickupLocation.getLatitude(),pickupLocation.getLongitude()));
+                                intent.putExtra("location_end",String.format("%f,%f",Common.mLastLocation.getLatitude(),Common.mLastLocation.getLongitude()));
+
+                                startActivity(intent);
+                                finish();
+
+
+                            }catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            Toast.makeText(DriverTracking.this,""+t.getMessage(), Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    });
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -155,6 +248,7 @@ public class DriverTracking extends FragmentActivity implements OnMapReadyCallba
             public void onKeyEntered(String key, GeoLocation location) {
                 //Send Push Notification here
                 sendArrivedNotification(customerId);
+                btnStartTrip.setEnabled(true);
             }
 
             @Override

@@ -253,10 +253,10 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback {
                             this, R.raw.maps));
 
             if (!success) {
-                Log.e("WelcomeActivity", "Style parsing failed.");
+                Log.e("Welcome", "Style parsing failed.");
             }
         } catch (Resources.NotFoundException e) {
-            Log.e("WelcomeActivity", "Can't find style. Error: ", e);
+            Log.e("Welcome", "Can't find style. Error: ", e);
         }
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.setTrafficEnabled(false);

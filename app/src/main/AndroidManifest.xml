@@ -60,7 +60,10 @@
 
         <activity
             android:name=".DriverTracking"
-            android:label="@string/title_activity_driver_tracking"></activity>
+            android:label="@string/title_activity_driver_tracking" />
+        <activity
+            android:name=".TripDetailActivity"
+            android:label="@string/title_activity_trip_detail"></activity>
     </application>
 
 </manifest>
